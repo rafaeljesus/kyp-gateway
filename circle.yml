@@ -1,0 +1,16 @@
+machine:
+  services:
+    - docker
+
+test:
+  override:
+    - go test -v -race ./handlers/...
+
+deployment:
+  master:
+    branch: master
+    commands:
+      - docker build -t rafaeljesus/kyp-gateway .
+      - docker login -e $DOCKERHUB_EMAIL -u $DOCKERHUB_USER -p $DOCKERHUB_PASS
+      - docker tag rafaeljesus/kyp-gateway rafaeljesus/kyp-gateway:master
+      - docker push rafaeljesus/kyp-gateway:master
