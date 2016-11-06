@@ -29,7 +29,7 @@ func main() {
 	v1.GET("/todos", handlers.TodosIndex)
 	v1.POST("/todos", handlers.TodosCreate)
 
-	log.Print("Starting Kyp Gateway Service...", KYP_GATEWAY_PORT)
+	log.Print("Starting Kyp Gateway Service at port", KYP_GATEWAY_PORT)
 
 	e.Run(fasthttp.New(":" + KYP_GATEWAY_PORT))
 }

@@ -7,6 +7,9 @@
 Env vars
 ```bash
 export KYP_GATEWAY_PORT=3004
+export KYP_AUTH_ENDPOINT=http://localhost:3000/v1/token
+export KYP_TODO_ENDPOINT=http://localhost:3001/v1/todos
+export KYP_USERS_ENDPOINT=http://localhost:3003/v1/users
 export KYP_SECRET_KEY=c91267c27a8599ca0480ea505487d052e3b63a1dd39819db853225a518200399
 ```
 
