@@ -5,6 +5,7 @@ import (
 	"github.com/labstack/echo/engine/fasthttp"
 	"github.com/labstack/echo/middleware"
 	"github.com/rafaeljesus/kyp-gateway/handlers"
+	"github.com/rafaeljesus/kyp-gateway/middlewares"
 	"log"
 	"os"
 )
@@ -17,6 +18,7 @@ func main() {
 	e.Use(middleware.CORS())
 	e.Use(middleware.Secure())
 	e.Use(middleware.Gzip())
+	e.Use(middlewares.EnsurKypProxyHeader)
 
 	v1 := e.Group("/api/v1")
 	v1.GET("/healthz", handlers.HealthzIndex)
