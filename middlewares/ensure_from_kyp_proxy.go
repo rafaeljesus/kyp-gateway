@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func EnsurKypProxyHeader(next echo.HandlerFunc) echo.HandlerFunc {
+func EnsureKypProxyHeader(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		header := c.Request().Header().Get("KypProxy")
 

@@ -18,7 +18,7 @@ func main() {
 	e.Use(middleware.CORS())
 	e.Use(middleware.Secure())
 	e.Use(middleware.Gzip())
-	e.Use(middlewares.EnsurKypProxyHeader)
+	e.Use(middlewares.EnsureKypProxyHeader)
 
 	v1 := e.Group("/api/v1")
 	v1.GET("/healthz", handlers.HealthzIndex)
