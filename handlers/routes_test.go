@@ -48,3 +48,23 @@ func TestUsersShow(t *testing.T) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 	}
 }
+
+func TestTokenCreate(t *testing.T) {
+	defer gock.Off()
+	gock.New(KYP_AUTH_ENDPOINT).
+		Post("/token").
+		Reply(200).
+		JSON(map[string]string{"Token": "foo"})
+
+	response := `{"Token":"foo"}`
+	e := echo.New()
+	req, _ := http.NewRequest(echo.POST, "/api/v1/token", strings.NewReader(response))
+	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	rec := httptest.NewRecorder()
+	ctx := e.NewContext(standard.NewRequest(req, e.Logger()), standard.NewResponse(rec, e.Logger()))
+
+	if assert.NoError(t, TokenCreate(ctx)) {
+		assert.Equal(t, http.StatusOK, rec.Code)
+		assert.Equal(t, response, rec.Body.String())
+	}
+}
