@@ -29,3 +29,22 @@ func TestUsersCreate(t *testing.T) {
 		assert.Equal(t, http.StatusCreated, rec.Code)
 	}
 }
+
+func TestUsersShow(t *testing.T) {
+	defer gock.Off()
+	gock.New(KYP_USERS_ENDPOINT).
+		Get("/users").
+		Reply(200).
+		JSON(map[string]int{"id": 1})
+
+	response := `{"id":"1"}`
+	e := echo.New()
+	req, _ := http.NewRequest(echo.GET, "/api/v1/users/1", strings.NewReader(response))
+	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	rec := httptest.NewRecorder()
+	ctx := e.NewContext(standard.NewRequest(req, e.Logger()), standard.NewResponse(rec, e.Logger()))
+
+	if assert.NoError(t, UsersShow(ctx)) {
+		assert.Equal(t, http.StatusOK, rec.Code)
+	}
+}
