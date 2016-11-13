@@ -14,7 +14,7 @@ import (
 func TestUsersCreate(t *testing.T) {
 	defer gock.Off()
 	gock.New(KYP_USERS_ENDPOINT).
-		Post("/users").
+		Post("/").
 		Reply(201).
 		JSON(map[string]int{"id": 1})
 
@@ -33,7 +33,7 @@ func TestUsersCreate(t *testing.T) {
 func TestUsersShow(t *testing.T) {
 	defer gock.Off()
 	gock.New(KYP_USERS_ENDPOINT).
-		Get("/users").
+		Get("/").
 		Reply(200).
 		JSON(map[string]int{"id": 1})
 
@@ -52,7 +52,7 @@ func TestUsersShow(t *testing.T) {
 func TestTokenCreate(t *testing.T) {
 	defer gock.Off()
 	gock.New(KYP_AUTH_ENDPOINT).
-		Post("/token").
+		Post("/").
 		Reply(200).
 		JSON(map[string]string{"Token": "foo"})
 
