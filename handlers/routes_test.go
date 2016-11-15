@@ -15,7 +15,7 @@ func TestUsersCreate(t *testing.T) {
 	defer gock.Off()
 	gock.New(KYP_USERS_ENDPOINT).
 		Post("/").
-		Reply(201).
+		Reply(http.StatusCreated).
 		JSON(map[string]int{"id": 1})
 
 	response := `{"id":"1"}`
@@ -34,7 +34,7 @@ func TestUsersShow(t *testing.T) {
 	defer gock.Off()
 	gock.New(KYP_USERS_ENDPOINT).
 		Get("/").
-		Reply(200).
+		Reply(http.StatusOK).
 		JSON(map[string]int{"id": 1})
 
 	response := `{"id":"1"}`
@@ -53,7 +53,7 @@ func TestTokenCreate(t *testing.T) {
 	defer gock.Off()
 	gock.New(KYP_AUTH_ENDPOINT).
 		Post("/").
-		Reply(200).
+		Reply(http.StatusOK).
 		JSON(map[string]string{"Token": "foo"})
 
 	response := `{"Token":"foo"}`
@@ -66,5 +66,43 @@ func TestTokenCreate(t *testing.T) {
 	if assert.NoError(t, TokenCreate(ctx)) {
 		assert.Equal(t, http.StatusOK, rec.Code)
 		assert.Equal(t, response, rec.Body.String())
+	}
+}
+
+func TestTodosIndex(t *testing.T) {
+	defer gock.Off()
+	gock.New(KYP_TODO_ENDPOINT).
+		Get("/").
+		Reply(http.StatusOK).
+		JSON(map[string]int{"id": 1})
+
+	response := `{"id":"1"}`
+	e := echo.New()
+	req, _ := http.NewRequest(echo.GET, "/api/v1/todos", strings.NewReader(response))
+	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	rec := httptest.NewRecorder()
+	ctx := e.NewContext(standard.NewRequest(req, e.Logger()), standard.NewResponse(rec, e.Logger()))
+
+	if assert.NoError(t, TodosIndex(ctx)) {
+		assert.Equal(t, http.StatusOK, rec.Code)
+	}
+}
+
+func TestTodoCreate(t *testing.T) {
+	defer gock.Off()
+	gock.New(KYP_TODO_ENDPOINT).
+		Post("/").
+		Reply(http.StatusCreated).
+		JSON(map[string]string{"id": "1"})
+
+	response := `{"id":"1"}`
+	e := echo.New()
+	req, _ := http.NewRequest(echo.POST, "/api/v1/todos", strings.NewReader(response))
+	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	rec := httptest.NewRecorder()
+	ctx := e.NewContext(standard.NewRequest(req, e.Logger()), standard.NewResponse(rec, e.Logger()))
+
+	if assert.NoError(t, TodosCreate(ctx)) {
+		assert.Equal(t, http.StatusCreated, rec.Code)
 	}
 }
